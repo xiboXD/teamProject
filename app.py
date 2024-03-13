@@ -23,6 +23,7 @@ def start_task():
     submitter_name = request.json.get('submitterName')
     experiment_details = request.json.get('experimentDetails')
     experiment_id = request.json.get('experimentId')
+    sampleNum = request.json.get('noOfSamples')
 
     # Print the request body
     app.logger.info('Received request body:')
