@@ -1,13 +1,15 @@
 import redis
 from rq import Queue
 from rq.job import Job
-from flask import Flask, request, jsonify  
+from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 
 # Import your task module
 from tasks import *
 
 # Create Flask application
 app = Flask(__name__)
+cors = CORS(app)
 
 # Create Redis connection and task queue
 redis_conn = redis.Redis()
