@@ -16,6 +16,7 @@ def convert_to_webp(image_bin):
             return img_bytes.getvalue()
 
 def run_dalle(prompt):
+    import os
     from openai import OpenAI
     client = OpenAI()
     response = client.images.generate(
