@@ -25,6 +25,7 @@ def start_task():
     experiment_details = request.json.get('experimentDetails')
     experiment_id = request.json.get('experimentId')
     sampleNum = request.json.get('noOfSamples')
+    submittedDate = request.json.get('submittedDate')
 
     # Print the request body
     app.logger.info('Received request body:')
@@ -32,9 +33,10 @@ def start_task():
     app.logger.info(f'traits_file: {traits_file}')
     app.logger.info(f'js_file: {js_file}')
     app.logger.info(f'sampleNum: {sampleNum}')
+    app.logger.info(f'submittedDate: {submittedDate}')
 
     # Enqueue the job
-    job = q.enqueue(generate_images, config_file, traits_file, js_file, sampleNum, submitter_name, experiment_details, experiment_id)
+    job = q.enqueue(generate_images, config_file, traits_file, js_file, sampleNum, submitter_name, experiment_details, experiment_id, submittedDate)
 
     return jsonify({"job_id": job.get_id()}), 202
 
