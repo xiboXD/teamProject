@@ -9,7 +9,7 @@ from tasks import *
 
 # Create Flask application
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins="https://faizal-aelf.github.io")
 # Create Redis connection and task queue
 redis_conn = redis.Redis()
 q = Queue(connection=redis_conn)
