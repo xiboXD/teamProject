@@ -17,10 +17,12 @@ q = Queue(connection=redis_conn)
 @app.route('/start-task', methods=['POST'])
 def start_task():
     # Extract necessary info from request
-    config_file = request.json.get('config_file')
-    traits_file = request.json.get('traits_file')
-    js_file = request.json.get('js_file')
-    sampleNum = request.json.get('sampleNum')
+    config_file = request.json.get('configFile')
+    traits_file = request.json.get('traitsFile')
+    js_file = request.json.get('createPromptFile')
+    submitter_name = request.json.get('submitterName')
+    experiment_details = request.json.get('experimentDetails')
+    experiment_id = request.json.get('experimentId')
 
     # Print the request body
     app.logger.info('Received request body:')
