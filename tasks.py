@@ -93,8 +93,7 @@ def generate_images(config_file, traits_file, js_file, sampleNum, submitter_name
 
     insert(collection, dataEntry.__dict__)
 
-    print(query(collection_name))
-
+    # print(query(collection_name))
 
     return base64images
 
