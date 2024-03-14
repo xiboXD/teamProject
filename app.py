@@ -70,5 +70,46 @@ def get_result_from_mongo(experiment_id):
     
     return jsonify(results), 200
 
+@app.route('/experiments/get-list', methods=['GET'])
+def get_list_from_mongo():
+    # Get all collection names
+    collection_names = db.list_collection_names()
+    
+    # Initialize result list
+    results = []
+    
+    # Iterate over collection names
+    for name in collection_names:
+        if name.startswith('experiment_'):
+            # Extract experiment ID
+            experiment_id = name.split('_')[1]
+            
+            # Get the collection
+            collection = db[name]
+            
+            # Get the first document (if exists)
+            first_document = collection.find_one()
+            
+            if first_document:  # Check if document exists
+                # Extract experiment details, submitter name, submitted date, and status
+                experiment_details = first_document.get('description', '')
+                submitter_name = first_document.get('submitter', '')
+                submitted_date = first_document.get('create_date', '')
+                status = first_document.get('status', '')
+                
+                # Create dictionary with experiment info
+                experiment_info = {
+                    'experimentId': experiment_id,
+                    'experimentDetails': experiment_details,
+                    'submitterName': submitter_name,
+                    'submittedDate': submitted_date,
+                    'status': status
+                }
+                
+                # Add experiment info to results list
+                results.append(experiment_info)
+    
+    return jsonify(results), 200
+
 if __name__ == '__main__':
     app.run(debug=True, port=2323) 
