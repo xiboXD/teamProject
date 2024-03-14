@@ -53,7 +53,8 @@ def generate_one_sample(prompt):
     print("generating image now")
     dalle_result = run_dalle(prompt)
     url = dalle_result['data'][0]['url']
+    revised_prompt = dalle_result['data'][0]['revised_prompt']
     image_bin = download_image(url)
     image_256 = reduce_size(image_bin, 4)
     base64Image = base64.b64encode(image_256).decode('utf8')
-    return base64Image
+    return base64Image, revised_prompt
