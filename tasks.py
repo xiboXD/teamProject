@@ -82,7 +82,7 @@ def generate_images(config_file, traits_file, js_file, sampleNum, submitter_name
             imageResult=base64image,
             prompt=prompt,
             revised_prompt=revised_prompt,
-            taitsFile=traits_file,
+            traitsFile=traits_file,
             configFile=config_file,
             createPromptFile=js_file
             )

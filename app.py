@@ -68,6 +68,7 @@ def get_result_from_mongo(experiment_id):
     for result in results:
         result['_id'] = str(result['_id'])
     
+    numberOfResult = len(results)
     # Initialize formatted results list
     formatted_results = []
     
@@ -77,7 +78,7 @@ def get_result_from_mongo(experiment_id):
         formatted_result = {
             "experimentId": experiment_id,
             "submitterName": result.get("submitter", ""),
-            "noOfSamples": result.get("noOfSamples", ""),
+            "noOfSamples": numberOfResult,
             "experimentDetails": result.get("description", ""),
             "status": result.get("status", ""),
             "submittedDate": result.get("create_date", ""),
