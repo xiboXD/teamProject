@@ -15,7 +15,7 @@ redis_conn = redis.Redis()
 q = Queue(connection=redis_conn)
 
 # Define route for starting a task
-@app.route('/prompt-tuning/start-task', methods=['POST'])
+@app.route('/experiments/start-task', methods=['POST'])
 def start_task():
     # Extract necessary info from request
     config_file = request.json.get('configFile')
@@ -41,7 +41,7 @@ def start_task():
     return jsonify({"job_id": job.get_id()}), 202
 
 # Define route for getting job status
-@app.route('/prompt-tuning/job/<job_id>', methods=['GET'])
+@app.route('/experiments/job/<job_id>', methods=['GET'])
 def get_job_status(job_id):
     job = Job.fetch(job_id, connection=redis_conn)
 
