@@ -3,6 +3,7 @@ from rq import Queue
 from rq.job import Job
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
+from pymongo import MongoClient
 
 # Import your task module
 from tasks import *
@@ -13,6 +14,9 @@ CORS(app, origins="https://faizal-aelf.github.io")
 # Create Redis connection and task queue
 redis_conn = redis.Redis()
 q = Queue(connection=redis_conn)
+
+client = MongoClient('mongodb://localhost:27017/')
+db = client['experimentPlatform']
 
 # Define route for starting a task
 @app.route('/experiments/start-task', methods=['POST'])
@@ -52,6 +56,19 @@ def get_job_status(job_id):
     else:
         return jsonify({"status": "in progress"}), 202
 
+@app.route('/experiments/result/<experiment_id>', methods=['GET'])
+def get_result_from_mongo(experiment_id):
+    # Get the collection
+    collection = db[f'experiment_{experiment_id}']
+    
+    # Query all data from the collection
+    results = list(collection.find({}))
+    
+    # Convert ObjectId to string for JSON serialization
+    for result in results:
+        result['_id'] = str(result['_id'])
+    
+    return jsonify(results), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=2323) 

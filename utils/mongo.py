@@ -6,7 +6,7 @@ class DataEntry:
         self.submitter = submitter
         self.create_date = create_date
         self.status = status
-        self.result_link = imageResult
+        self.imageResult = imageResult
         self.prompt = prompt
         self.revised_prompt = revised_prompt
 

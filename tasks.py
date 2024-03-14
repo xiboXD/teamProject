@@ -50,6 +50,7 @@ def store_mongo(dataEntry, collection_name):
 
 def generate_images(config_file, traits_file, js_file, sampleNum, submitter_name, experiment_details, experiment_id, submittedDate):
     # Your long-running task logic here
+    print("generate_images is called here")
     samples = get_samples(json.loads(traits_file), sampleNum)
 
     # with open(js_file, 'r') as js_file:
