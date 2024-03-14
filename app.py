@@ -96,6 +96,7 @@ def get_result_from_mongo(experiment_id):
                 "prompt": result.get("prompt", ""),
                 "imageResult": result.get("imageResult", ""),
                 "revised_prompt": result.get("revised_prompt", ""),
+                "traits": result.get("traits", ""),
                 "status": result.get("status", "")
             }
             formatted_result["result"].append(formatted_entry)
