@@ -4,6 +4,7 @@ from rq.job import Job
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from pymongo import MongoClient
+import time
 
 # Import your task module
 from tasks import *
@@ -29,7 +30,7 @@ def start_task():
     experiment_details = request.json.get('experimentDetails')
     experiment_id = request.json.get('experimentId')
     sampleNum = request.json.get('noOfSamples')
-    submittedDate = request.json.get('submittedDate')
+    submittedDate = int(time.time())
 
     # Print the request body
     app.logger.info('Received request body:')

@@ -1,7 +1,7 @@
 import pymongo
 
 class DataEntry:
-    def __init__(self, description, submitter, create_date, status, imageResult, prompt, revised_prompt, traitsFile, configFile, createPromptFile):
+    def __init__(self, description, submitter, create_date, status, imageResult, prompt, revised_prompt, traitsFile, configFile, createPromptFile, traits):
         self.description = description
         self.submitter = submitter
         self.create_date = create_date
@@ -12,6 +12,7 @@ class DataEntry:
         self.traitsFile = traitsFile
         self.configFile = configFile
         self.createPromptFile = createPromptFile
+        self.traits = traits
 
 def get_db(db_name):
     client = pymongo.MongoClient("mongodb://localhost:27017/")
