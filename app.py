@@ -142,7 +142,10 @@ def get_list_from_mongo():
                 # Add experiment info to results list
                 results.append(experiment_info)
     
-    return jsonify(results), 200
+    # Sort results by submittedDate
+    sorted_results = sorted(results, key=lambda x: x['submittedDate'])
+    
+    return jsonify(sorted_results), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=2323) 
