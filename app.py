@@ -68,7 +68,39 @@ def get_result_from_mongo(experiment_id):
     for result in results:
         result['_id'] = str(result['_id'])
     
-    return jsonify(results), 200
+    # Initialize formatted results list
+    formatted_results = []
+    
+    result = collection.find_one()
+    # Format each result
+    if result:
+        formatted_result = {
+            "experimentId": experiment_id,
+            "submitterName": result.get("submitter", ""),
+            "noOfSamples": result.get("noOfSamples", ""),
+            "experimentDetails": result.get("description", ""),
+            "status": result.get("status", ""),
+            "submittedDate": result.get("create_date", ""),
+            "traitsFile": result.get("traitsFile", ""),
+            "configFile": result.get("configFile", ""),
+            "createPromptFile": result.get("createPromptFile", ""),
+            "result": []
+        }
+        
+        for result in results:
+            formatted_entry = {
+                "_id": str(result["_id"]),
+                "create_date": result.get("create_date", ""),
+                "prompt": result.get("prompt", ""),
+                "imageResult": result.get("imageResult", ""),
+                "revised_prompt": result.get("revised_prompt", ""),
+                "status": result.get("status", "")
+            }
+            formatted_result["result"].append(formatted_entry)
+        
+        formatted_results.append(formatted_result)  # Append formatted result to the list
+    
+    return jsonify(formatted_results), 200
 
 @app.route('/experiments/get-list', methods=['GET'])
 def get_list_from_mongo():
