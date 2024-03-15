@@ -73,7 +73,7 @@ def get_result_from_mongo(experiment_id):
     # Initialize formatted results list
     formatted_results = []
     
-    result = collection.find_one()
+    result = collection.find_one(sort=[("_id", -1)])
     # Format each result
     if result:
         formatted_result = {
@@ -123,7 +123,7 @@ def get_list_from_mongo():
             collection = db[name]
             
             # Get the first document (if exists)
-            first_document = collection.find_one()
+            first_document = collection.find_one(sort=[("_id", -1)])
             
             if first_document:  # Check if document exists
                 # Extract experiment details, submitter name, submitted date, and status
