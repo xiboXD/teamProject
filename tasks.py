@@ -12,10 +12,8 @@ class Sampler:
     baseList = ['background', 'breed', 'clothes']
     def __init__(self, traits):
         self.traits = traits
-        print("traits here:", traits)
         self.base3 = [key for key in self.traits if key in self.baseList]
         self.non_base3 = [key for key in self.traits if key not in self.baseList]
-        print("log", self.base3, self.non_base3)
         # self.base3_traits = {
         #     tt: self._get_trait_values(tt)
         #     for tt in self.base3
@@ -31,7 +29,6 @@ class Sampler:
             trait_args = []
             for trait in self.base3:
                 values = self.traits[trait]
-                print(values)
                 trait_args.append({'traitType': trait, 'value': random.sample(values, 1)[0]})
             additional_count = random.randint(1,6)
             if additional_count > len(self.non_base3):
@@ -39,10 +36,8 @@ class Sampler:
 
             for trait in random.sample(list(self.non_base3), additional_count):
                 values = self.traits[trait]
-                print(values)
                 trait_args.append({'traitType': trait, 'value': random.sample(values, 1)[0]})
             output.append(trait_args)
-        print("output", output)
         return output
 
 def create_collection_if_not_exists(collection_name, db_name="experimentPlatform"):
