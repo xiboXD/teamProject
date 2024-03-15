@@ -5,6 +5,7 @@ import random
 from utils.constants import *
 from utils.mongo import *
 from utils.generation import *
+import concurrent.futures
 import time
 
 
@@ -89,6 +90,13 @@ def update_mongo(data_entry, collection_name):
     collection.update_one({"prompt": data_entry['prompt']}, {"$set": data_entry})
 
 
+def execute_with_timeout(prompt):
+    try:
+        base64image, revised_prompt = generate_one_sample(prompt)
+        return base64image, revised_prompt
+    except Exception as e:
+        print(f"Error: {e}")
+        return "fail_to_generate", "fail_to_generate"
 
 def generate_images(config_file, traits_file, js_file, sampleNum, submitter_name, experiment_details, experiment_id, submittedDate):
     # Your long-running task logic here
@@ -130,7 +138,9 @@ def generate_images(config_file, traits_file, js_file, sampleNum, submitter_name
 
     # Second loop to update DataEntry objects with image results
     for i, prompt in enumerate(prompts):
-        base64image, revised_prompt = generate_one_sample(prompt)
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future = executor.submit(execute_with_timeout, prompt)
+            base64image, revised_prompt = future.result(timeout=60)
         base64images.append(base64image)  # Second value of generate_one_sample output
         
         # Update DataEntry object in MongoDB
