@@ -4,5 +4,6 @@
     "Mouth": ["Angelic Savor", "Belching", "Blissful Munch "],
     "Clothes": ["Anime School Uniform", "Bandolier", "Baseball Tee"],
     "Pet": ["Alpaca Cria", "Baby Albatross", "Baby Albino Peacock"],
-    "Necklace": ["Beaded Necklace", "Bib Necklace", "Butterfly necklace"]
+    "Necklace": ["Beaded Necklace", "Bib Necklace", "Butterfly necklace"],
+    "Toy": ["Car", "Rocket", "ball"]
 }

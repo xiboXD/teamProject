@@ -52,9 +52,12 @@ def generate_one_sample(prompt):
     import base64
     print("generating image now")
     dalle_result = run_dalle(prompt)
-    url = dalle_result['data'][0]['url']
-    revised_prompt = dalle_result['data'][0]['revised_prompt']
-    image_bin = download_image(url)
-    image_256 = reduce_size(image_bin, 4)
-    base64Image = base64.b64encode(image_256).decode('utf8')
+    url = dalle_result['data'][0]['url'] if dalle_result['data'][0]['url'] else "error"
+    revised_prompt = dalle_result['data'][0]['revised_prompt'] if dalle_result['data'][0]['revised_prompt'] else "error"
+    if url != "error":
+        image_bin = download_image(url)
+        image_256 = reduce_size(image_bin, 4)
+        base64Image = base64.b64encode(image_256).decode('utf8')
+    else:
+        base64Image = ""
     return base64Image, revised_prompt
