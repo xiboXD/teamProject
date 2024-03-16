@@ -17,7 +17,14 @@ def convert_to_webp(image_bin):
 
 def run_dalle(prompt):
     import os
+    import time
     from openai import OpenAI
+    
+    # delay to prevent rate limit
+    rate_limit_per_minute = 5
+    delay = 60.0 / rate_limit_per_minute
+    time.sleep(delay)
+    
     client = OpenAI()
     response = client.images.generate(
       model="dall-e-3",
