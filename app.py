@@ -5,18 +5,23 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from pymongo import MongoClient
 import time
+import os
 
 # Import your task module
 from tasks import *
 
+mongo_url = os.environ.get("MONGO_URL", "mongodb://localhost:27017/")
+redis_host = os.environ.get("REDIS_HOST", "localhost")
+redis_port = int(os.environ.get("REDIS_PORT", "6379"))
+
 # Create Flask application
 app = Flask(__name__)
-CORS(app, origins="https://faizal-aelf.github.io")
+CORS(app)
 # Create Redis connection and task queue
-redis_conn = redis.Redis()
+redis_conn = redis.Redis(host=redis_host, port=redis_port)
 q = Queue(connection=redis_conn)
 
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient(mongo_url)
 db = client['experimentPlatform']
 
 # Define route for starting a task
