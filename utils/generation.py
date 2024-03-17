@@ -1,6 +1,8 @@
 from .constants import DALLE_RESULT_FIELD_NAME, DREAM_SHAPER_MODEL_ID, LEONARDO_RESULT_FIELD_NAME
 from .resizer import reduce_size
 
+rate_limit_per_minute = 15
+delay = 60 / rate_limit_per_minute
 
 def download_image(image_url):
     import requests
@@ -20,9 +22,6 @@ def run_dalle(prompt):
     import time
     from openai import OpenAI
     
-    # delay to prevent rate limit
-    rate_limit_per_minute = 5
-    delay = 60.0 / rate_limit_per_minute
     time.sleep(delay)
     
     client = OpenAI()

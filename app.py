@@ -6,6 +6,7 @@ from flask_cors import CORS, cross_origin
 from pymongo import MongoClient
 import time
 import os
+from utils.generation import delay
 
 # Import your task module
 from tasks import *
@@ -45,7 +46,7 @@ def start_task():
     app.logger.info(f'sampleNum: {sampleNum}')
     app.logger.info(f'submittedDate: {submittedDate}')
 
-    job_timeout_value = 60.0 / 5 * int(sampleNum)
+    job_timeout_value = delay * int(sampleNum)
 
     # Enqueue the job
     job = q.enqueue(generate_images, config_file, traits_file, js_file, sampleNum, submitter_name, experiment_details, experiment_id, submittedDate, job_timeout=job_timeout_value)
