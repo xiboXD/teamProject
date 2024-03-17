@@ -6,7 +6,7 @@ from flask_cors import CORS, cross_origin
 from pymongo import MongoClient
 import time
 import os
-from utils.generation import delay
+from utils.generation import *
 
 # Import your task module
 from tasks import *
@@ -26,44 +26,21 @@ client = MongoClient(mongo_url)
 db = client['experimentPlatform']
 
 # Define route for starting a task
-@app.route('/experiments/start-task', methods=['POST'])
+@app.route('/image/create', methods=['POST'])
 def start_task():
     # Extract necessary info from request
-    config_file = request.json.get('configFile')
-    traits_file = request.json.get('traitsFile')
-    js_file = request.json.get('createPromptFile')
-    submitter_name = request.json.get('submitterName')
-    experiment_details = request.json.get('experimentDetails')
-    experiment_id = request.json.get('experimentId')
-    sampleNum = request.json.get('noOfSamples')
-    submittedDate = int(time.time())
+    prompt = request.json.get('prompt')
+    
 
     # Print the request body
     app.logger.info('Received request body:')
-    app.logger.info(f'config_file: {config_file}')
-    app.logger.info(f'traits_file: {traits_file}')
-    app.logger.info(f'js_file: {js_file}')
-    app.logger.info(f'sampleNum: {sampleNum}')
-    app.logger.info(f'submittedDate: {submittedDate}')
-
-    job_timeout_value = delay * int(sampleNum)
-
+    app.logger.info(f'prompt: {prompt}')
+    
     # Enqueue the job
-    job = q.enqueue(generate_images, config_file, traits_file, js_file, sampleNum, submitter_name, experiment_details, experiment_id, submittedDate, job_timeout=job_timeout_value)
+    base64Image, _ = generate_one_sample(prompt)
 
-    return jsonify({"job_id": job.get_id()}), 202
+    return jsonify({"image": base64Image}), 200
 
-# Define route for getting job status
-@app.route('/experiments/job/<job_id>', methods=['GET'])
-def get_job_status(job_id):
-    job = Job.fetch(job_id, connection=redis_conn)
-
-    if job.is_finished:
-        return jsonify({"status": "finished", "result": job.result}), 200
-    elif job.is_failed:
-        return jsonify({"status": "failed"}), 200
-    else:
-        return jsonify({"status": "in progress"}), 202
 
 @app.route('/experiments/result/<experiment_id>', methods=['GET'])
 def get_result_from_mongo(experiment_id):
