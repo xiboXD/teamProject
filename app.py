@@ -132,4 +132,4 @@ def get_list_from_mongo():
     return jsonify(results), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, port=443) 
+    app.run(debug=True, port=2323) 
