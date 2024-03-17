@@ -45,8 +45,10 @@ def start_task():
     app.logger.info(f'sampleNum: {sampleNum}')
     app.logger.info(f'submittedDate: {submittedDate}')
 
+    job_timeout_value = 60.0 / 5 * int(sampleNum)
+
     # Enqueue the job
-    job = q.enqueue(generate_images, config_file, traits_file, js_file, sampleNum, submitter_name, experiment_details, experiment_id, submittedDate)
+    job = q.enqueue(generate_images, config_file, traits_file, js_file, sampleNum, submitter_name, experiment_details, experiment_id, submittedDate, job_timeout=job_timeout_value)
 
     return jsonify({"job_id": job.get_id()}), 202
 

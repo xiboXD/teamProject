@@ -140,7 +140,7 @@ def generate_images(config_file, traits_file, js_file, sampleNum, submitter_name
     for i, prompt in enumerate(prompts):
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future = executor.submit(execute_with_timeout, prompt)
-            base64image, revised_prompt = future.result(timeout=600)
+            base64image, revised_prompt = future.result(timeout=60)
         base64images.append(base64image)  # Second value of generate_one_sample output
         
         # Update DataEntry object in MongoDB
