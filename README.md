@@ -25,7 +25,7 @@ In this project, we utilize the Python Flask framework for developing the backen
 
 1. Running environment: Python3 (3.10.9)
 2. Dependency installation: Go to your terminal and run `pip install -r requirements.txt`
-3. Environment variable: For Mac, go to your terminal and run `export OPENAI_API_KEY='<key>'` For windows, run `setx OPENAI_API_KEY "<key>"
+3. Environment variable: For Mac, go to your terminal and run `export OPENAI_API_KEY='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'` For windows, run `setx OPENAI_API_KEY "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"
 `
 4. Start backend service: Run `python app.py` in terminal, the the backend service should be run on http://127.0.0.1:5050
 
