@@ -19,7 +19,7 @@ In this project, we utilize the Python Flask framework for developing the backen
 
 2. Choose different styles for generating images with distinct visual characteristics.
 
-3. Get generated iamges.
+3. Get generated images.
 
 ## Backend Service (Wen Xibo | A0268503A)
 
