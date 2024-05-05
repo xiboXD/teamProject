@@ -1,71 +1,68 @@
-# Getting Started with Create React App
+# AI Image Generator - IT5007 group porject
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Github link: https://github.com/xiboXD/teamProject
 
-## Available Scripts
+Group member:
 
-In the project directory, you can run:
+AUNG MYO MYINT LEO | A0268980L
 
-### `npm start`
+Ng, yi Ming | A0211008B
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Wen Xibo | A0268503A
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## List of feature
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+In this project, we utilize the Python Flask framework for developing the backend service and React for the frontend service. Our backend leverages the image generation API provided by DALLE-3 to assist users in creating images according to their preferences. Meanwhile, the frontend offers a vibrant UI where users can select various styles and easily input prompts. Within our app, users can:
 
-### `npm run build`
+1. Generate images based on the prompts they input.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Choose different styles for generating images with distinct visual characteristics.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Backend Service (Wen Xibo | A0268503A)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Running Instructions
 
-### `npm run eject`
+1. Running environment: Python3 (3.10.9)
+2. Dependency installation: Go to your terminal and run `pip install -r requirements.txt`
+3. Environment variable: For Mac, go to your terminal and run `export OPENAI_API_KEY='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'` For windows, run `setx OPENAI_API_KEY "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"
+`
+4. Start backend service: Run `python app.py` in terminal, the the backend service should be run on http://127.0.0.1:5050
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Backend Implementation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Architecture:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+    The backend architecture involves a Flask application serving as the foundation. Incoming requests are handled via route definitions. Upon receiving a POST request to '/image/create', the backend extracts the prompt from the request body. It enqueues the job to generate an image based on the prompt using a task queue system. The architecture utilizes Redis for task queuing and MongoDB for data storage. Logging is implemented to capture request details.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. Implementation:
 
-## Learn More
+    Task Queue: Utilizes Redis and RQ for asynchronous task processing. Upon receiving an image generation request, the job is enqueued to ensure non-blocking execution.
+    Image Generation: Implements image generation functionality based on the provided prompt. The generated image is saved to the 'images' folder with a unique filename based on the timestamp.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    Endpoint Definitions: Defines endpoints '/image/create' for image generation and '/experiments/get-images' for fetching images from the 'images' folder as base64 strings.
+    Error Handling: Proper error handling mechanisms are not explicitly defined in the provided code snippet but should be implemented to enhance robustness.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. Authentication:
 
-### Code Splitting
+    Authentication mechanisms are not explicitly implemented in the provided code snippet. However, integration with third-party authentication services or the implementation of custom authentication using Flask extensions like Flask-Login could enhance security.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+4. Setup Automation:
 
-### Analyzing the Bundle Size
+    Setup automation scripts for initializing the backend environment are not provided in the code snippet. However, the Flask application can be easily initialized by executing the script. Further automation using tools like Docker or shell scripts could streamline environment setup.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+5. Other Novelties:
 
-### Making a Progressive Web App
+    Image Storage: Images are saved to the 'images' folder with unique filenames based on timestamps, facilitating efficient retrieval and management.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+    Base64 Encoding: Images fetched from the 'images' folder are encoded as base64 strings before being sent as responses, enabling seamless integration with frontend applications.
 
-### Advanced Configuration
+6. Documentation:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    Although the code snippet lacks inline comments for detailed documentation, the provided report serves as documentation for the backend implementation. Adding inline comments to the code would enhance readability and maintainability.
 
-### Deployment
+7. README Update:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+    The README file on the GitHub repository should be updated to include details about the implemented backend features, aiding in the evaluation and understanding of the project.
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# teamProject
+Overall, the backend implementation fulfills the core requirements by providing image generation functionality, task queuing, and image storage. Further enhancements can be made in terms of error handling, authentication, and documentation to improve the robustness and maintainability of the application.

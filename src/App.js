@@ -44,7 +44,7 @@ function App() {
 
   const fetchPastImages = async () => {
     try {
-      const response = await axios.get('http://localhost:5050/experiments/get-list');
+      const response = await axios.get('http://localhost:5050/experiments/get-images');
       const pastImagesData = response.data;
       // Extract past images from the response and update state
       setPastImages(pastImagesData);
@@ -105,10 +105,10 @@ function App() {
               ))
             ) : (
               // Render past images
-              pastImages.map((pastImage) => (
-                <div className="image-grid-item" key={pastImage.experimentId}>
+              pastImages.map((imageBase64, index) => (
+                <div className="image-grid-item" key={index}>
                   {/* Display past image */}
-                  <img src={pastImage.image} alt={`Past Image ${pastImage.experimentId}`} />
+                  <img src={`data:image/png;base64,${imageBase64}`} alt={`Past Image ${index + 1}`} />
                 </div>
               ))
             )}

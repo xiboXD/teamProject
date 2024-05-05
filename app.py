@@ -7,6 +7,11 @@ from pymongo import MongoClient
 import time
 import os
 from utils.generation import *
+import os
+from datetime import datetime
+from flask import request, jsonify, current_app as app
+from utils.generation import generate_one_sample
+import base64
 
 # Import your task module
 from tasks import *
@@ -26,110 +31,47 @@ client = MongoClient(mongo_url)
 db = client['experimentPlatform']
 
 # Define route for starting a task
+
+
 @app.route('/image/create', methods=['POST'])
 def start_task():
-    # Extract necessary info from request
     prompt = request.json.get('prompt')
-    
 
     # Print the request body
     app.logger.info('Received request body:')
     app.logger.info(f'prompt: {prompt}')
-    
+
     # Enqueue the job
     base64Image, _ = generate_one_sample(prompt)
 
+    # Save image to images folder with timestamp as filename
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    image_filename = f"{timestamp}.png"
+    image_path = os.path.join(app.root_path, 'images', image_filename)
+    with open(image_path, 'wb') as f:
+        f.write(base64.b64decode(base64Image))  # Convert Base64 string to bytes and write to file
+
     return jsonify({"image": base64Image}), 200
 
-
-@app.route('/experiments/result/<experiment_id>', methods=['GET'])
-def get_result_from_mongo(experiment_id):
-    # Get the collection
-    collection = db[f'experiment_{experiment_id}']
+@app.route('/experiments/get-images', methods=['GET'])
+def get_images_base64_from_folder():
+    # Get list of filenames in the images folder
+    images_folder = os.path.join(app.root_path, 'images')
+    image_files = os.listdir(images_folder)
     
-    # Query all data from the collection
-    results = list(collection.find({}))
+    # Filter out any non-image files if necessary
+    image_files = [filename for filename in image_files if filename.lower().endswith(('.png', '.jpg', '.jpeg'))]
     
-    # Convert ObjectId to string for JSON serialization
-    for result in results:
-        result['_id'] = str(result['_id'])
+    # Read each image file, encode it as base64, and store in a list
+    image_base64_list = []
+    for filename in image_files:
+        image_path = os.path.join(images_folder, filename)
+        with open(image_path, 'rb') as f:
+            image_data = f.read()
+            image_base64 = base64.b64encode(image_data).decode('utf-8')
+            image_base64_list.append(image_base64)
     
-    numberOfResult = len(results)
-    # Initialize formatted results list
-    formatted_results = []
-    
-    result = collection.find_one(sort=[("_id", -1)])
-    # Format each result
-    if result:
-        formatted_result = {
-            "experimentId": experiment_id,
-            "submitterName": result.get("submitter", ""),
-            "noOfSamples": numberOfResult,
-            "experimentDetails": result.get("description", ""),
-            "status": result.get("status", ""),
-            "submittedDate": result.get("create_date", ""),
-            "traitsFile": result.get("traitsFile", ""),
-            "configFile": result.get("configFile", ""),
-            "createPromptFile": result.get("createPromptFile", ""),
-            "result": []
-        }
-        
-        for result in results:
-            formatted_entry = {
-                "_id": str(result["_id"]),
-                "create_date": result.get("create_date", ""),
-                "prompt": result.get("prompt", ""),
-                "imageResult": result.get("imageResult", ""),
-                "revised_prompt": result.get("revised_prompt", ""),
-                "traits": result.get("traits", ""),
-                "status": result.get("status", "")
-            }
-            formatted_result["result"].append(formatted_entry)
-        
-        formatted_results.append(formatted_result)  # Append formatted result to the list
-    
-    return jsonify(formatted_results), 200
-
-@app.route('/experiments/get-list', methods=['GET'])
-def get_list_from_mongo():
-    # Get all collection names
-    collection_names = db.list_collection_names()
-    
-    # Initialize result list
-    results = []
-    
-    # Iterate over collection names
-    for name in collection_names:
-        if name.startswith('experiment_'):
-            # Extract experiment ID
-            experiment_id = name.split('_')[1]
-            
-            # Get the collection
-            collection = db[name]
-            
-            # Get the first document (if exists)
-            first_document = collection.find_one(sort=[("_id", -1)])
-            
-            if first_document:  # Check if document exists
-                # Extract experiment details, submitter name, submitted date, and status
-                experiment_details = first_document.get('description', '')
-                submitter_name = first_document.get('submitter', '')
-                submitted_date = first_document.get('create_date', '')
-                status = first_document.get('status', '')
-                
-                # Create dictionary with experiment info
-                experiment_info = {
-                    'experimentId': experiment_id,
-                    'experimentDetails': experiment_details,
-                    'submitterName': submitter_name,
-                    'submittedDate': submitted_date,
-                    'status': status
-                }
-                
-                # Add experiment info to results list
-                results.append(experiment_info)
-    
-    return jsonify(results), 200
+    return jsonify(image_base64_list), 200
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5050) 
