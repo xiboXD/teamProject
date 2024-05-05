@@ -7,7 +7,7 @@ function App() {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false); // State to track loading status
   const [error, setError] = useState(null); // State to track errors
-  const [selectedStyle, setSelectedStyle] = useState(''); // State to track selected style
+  const [selectedStyle, setSelectedStyle] = useState('Pixel'); // Set default style to Pixel
   const [pastImages, setPastImages] = useState([]); // State to store past images
   const [showPastImages, setShowPastImages] = useState(false); // State to track visibility of past images
 
@@ -15,7 +15,9 @@ function App() {
     setIsLoading(true); // Set loading state to true when image generation starts
     setError(null); // Reset error state
     try {
-      const response = await axios.post('http://localhost:5050/image/create', { prompt, style: selectedStyle });
+      // Append selected style to the prompt
+      const promptWithStyle = `${prompt} with the style of ${selectedStyle}`;
+      const response = await axios.post('http://localhost:5050/image/create', { prompt: promptWithStyle, style: selectedStyle });
       setImage(response.data.image);
     } catch (error) {
       console.error('Error generating image:', error);
@@ -33,7 +35,6 @@ function App() {
     // Scroll to the top section
     document.querySelector('.app-header').scrollIntoView({ behavior: 'smooth' });
   };
-  
 
   const handleHidePastImages = () => {
     setShowPastImages(false); // Hide past images
