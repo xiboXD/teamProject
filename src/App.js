@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css'; // Import CSS file for styling
 
@@ -10,6 +10,13 @@ function App() {
   const [selectedStyle, setSelectedStyle] = useState(''); // State to track selected style
   const [pastImages, setPastImages] = useState([]); // State to store past images
   const [showPastImages, setShowPastImages] = useState(false); // State to track visibility of past images
+
+  useEffect(() => {
+    if (showPastImages) {
+      // Fetch past images when showPastImages state changes
+      fetchPastImages();
+    }
+  }, [showPastImages]);
 
   const handleGenerateImage = async () => {
     setIsLoading(true); // Set loading state to true when image generation starts
@@ -26,17 +33,23 @@ function App() {
   };
 
   const handleSeeMore = () => {
-    const pastImages = Array.from({ length: 6 }, (_, index) => index + 1);
-    setPastImages(pastImages);
     setShowPastImages(true);
-  
-    // Scroll to the top section
-    document.querySelector('.app-header').scrollIntoView({ behavior: 'smooth' });
   };
-  
 
   const handleHidePastImages = () => {
     setShowPastImages(false); // Hide past images
+  };
+
+  const fetchPastImages = async () => {
+    try {
+      const response = await axios.get('http://localhost:5050/experiments/get-list');
+      const pastImagesData = response.data;
+      // Extract past images from the response and update state
+      setPastImages(pastImagesData);
+    } catch (error) {
+      console.error('Error fetching past images:', error);
+      // Handle error if needed
+    }
   };
 
   return (
@@ -80,13 +93,23 @@ function App() {
         {showPastImages && (
           <div className="image-grid">
             {/* Render past images in a grid */}
-            {pastImages.map((imageId) => (
-              <div className="image-grid-item" key={imageId}>
-                {/* Display past image or placeholder */}
-                {/* For now, let's display placeholder text */}
-                {`Past Image ${imageId}`}
-              </div>
-            ))}
+            {pastImages.length === 0 ? (
+              // Render dummy boxes as placeholders
+              Array.from({ length: 6 }, (_, index) => (
+                <div className="image-grid-item placeholder" key={index}>
+                  {/* Display placeholder text */}
+                  Placeholder {index + 1}
+                </div>
+              ))
+            ) : (
+              // Render past images
+              pastImages.map((pastImage) => (
+                <div className="image-grid-item" key={pastImage.experimentId}>
+                  {/* Display past image */}
+                  <img src={pastImage.image} alt={`Past Image ${pastImage.experimentId}`} />
+                </div>
+              ))
+            )}
           </div>
         )}
       </div>
