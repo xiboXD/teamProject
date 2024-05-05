@@ -12,7 +12,6 @@ Wen Xibo | A0268503A
 
 ## List of feature
 
-
 In this project, we utilize the Python Flask framework for developing the backend service and React for the frontend service. Our backend leverages the image generation API provided by DALLE-3 to assist users in creating images according to their preferences. Meanwhile, the frontend offers a vibrant UI where users can select various styles and easily input prompts. Within our app, users can:
 
 1. Generate images based on the prompts they input.
@@ -68,3 +67,42 @@ In this project, we utilize the Python Flask framework for developing the backen
     The README file on the GitHub repository should be updated to include details about the implemented backend features, aiding in the evaluation and understanding of the project.
 
 Overall, the backend implementation fulfills the core requirements by providing image generation functionality, task queuing, and image storage. Further enhancements can be made in terms of error handling, authentication, and documentation to improve the robustness and maintainability of the application.
+
+## Frontend Service (AUNG MYO MYINT LEO | A0268980L)
+
+### Getting Started
+
+To run the front-end of this project, follow these steps:
+
+Clone this repository to your local machine:
+- git clone <repository-url>
+- Navigate to the project directory: cd <project-directory>
+- Install dependencies: npm install
+- Start the development server: npm start
+- Open your browser and navigate to http://localhost:3000 to view the application.
+
+## Functionality
+
+# Generating Artwork
+- Enter your prompt in the input field provided.
+- Select a style from the available options (Pixel, Disney, Space, Abstract, Dark Theme).
+- Click on the "Create Artwork" button to generate AI artwork based on your prompt and selected style.
+- The generated image will be displayed in the main area.
+
+# Exploring Past Images
+- Click on the "See more" button in the "Inspiration Gallery" section to view past AI-generated images.
+- The past images will be displayed in a grid below the main area.
+- To hide the past images, click on the "Hide" button.
+
+# Things to Improve
+
+- Error Handling: Enhance error handling to provide more informative error messages to users.
+- Accessibility: Ensure that the application is accessible to users with disabilities by adding appropriate ARIA attributes and keyboard navigation support.
+- UI/UX Enhancements: Improve the user interface and experience by adding animations, transitions, and feedback during image generation.
+- Optimization: Optimize the performance of the application, especially during image generation and when loading past images, to provide a smoother user experience.
+- Testing: Implement unit tests and integration tests to ensure the reliability and stability of the application.
+
+
+
+
+
